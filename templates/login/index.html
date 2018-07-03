@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %}首页{% endblock %}
+{% block content %}
+    {% if request.session.is_login %}
+    <h1>你好,{{ request.session.user_name }}！欢迎登录！</h1>
+    <hr>
+    <div>
+        <a href="{% url 'laf_info_list' %}">
+        <h2>信息列表</h2>
+        </a>
+    </div>
+    <div>
+        <a href="{% url 'laf_info_release' %}">
+        <h2>发布信息</h2>
+        </a>
+    </div>
+    {% else %}
+    <h1>登录后方可查看信息。</h1>
+    {% endif %}
+{% endblock %}

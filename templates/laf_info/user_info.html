@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>用户信息</title>
+</head>
+<body>
+    <div>
+        <a href="{% url 'laf_info_list' %}">
+        <h2>返回信息列表</h2>
+        </a>
+    </div>
+    <hr>
+    <p>用户名：{{ user.name }}</p>
+    <p>电话：{{ user.phone }}</p>
+    <p>邮箱：{{ user.email }}</p>
+</body>
+</html>

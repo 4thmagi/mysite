@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}信息列表{% endblock %}
+{% block content %}
+    {% if request.session.is_login %}
+    <h1>你好,{{ request.session.user_name }}！欢迎浏览寻物启事信息！</h1>
+    <hr>
+    <div>
+        <a href="{% url 'laf_info_list' %}">
+        <h2>信息列表</h2>
+        </a>
+    </div>
+    <hr>
+    {% for laf_info in f_infos %}
+        <div>
+            <a href="{% url 'f_info_detail' laf_info.pk %}">
+            <h3>{{ laf_info.title }}</h3>
+            </a>
+        </div>
+        <p>{{ laf_info.content|truncatechars_html:30 }}</p>
+        {% empty %}
+        <p>--当前还未有人发布过寻物启事信息--</p>
+    {% endfor %}
+    <hr>
+    <h3>共有{{ f_infos|length }}条寻物启事信息</h3>
+    {% else %}
+    <h1>登录后方可查看信息。</h1>
+    {% endif %}
+{% endblock %}

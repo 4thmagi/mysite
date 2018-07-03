@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ laf_info.title }}</title>
+</head>
+<body>
+    <div>
+        <a href="{% url 'f_info_list' %}">
+        <h2>寻物启事信息列表</h2>
+        </a>
+    </div>
+    <hr>
+    <h2>{{ laf_info.title }}</h2>
+    <p>发布者：{{ laf_info.author }}</p>
+    <p>发布日期：{{ laf_info.c_time|date:"Y-m-d G:n:s" }}</p>
+    <h3>信息内容：{{ laf_info.content }}</h3>
+    {% if laf_info.pic %}
+    {% if laf_info.tkind == '0' %}
+    <p>信息图片：</p>
+    <img src="{{ laf_info.pic.url }}">
+    {% endif %}
+    {% endif %}
+    {% if laf_info.tkind == '1' %}
+    <h3>证件信息后8位（仅供参考）：{{ laf_info.doc_info }}</h3>
+    {% endif %}
+</body>
+</html>

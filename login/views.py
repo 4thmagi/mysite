@@ -20,7 +20,7 @@ def index(request):
 
 def login(request):
     if request.session.get('is_login', None):
-        return redirect("index/")
+        return redirect("/index/")
     if request.method == "POST":
         login_form = forms.UserForm(request.POST)
         message = "请检查填写的内容！"
@@ -33,6 +33,7 @@ def login(request):
                     request.session['is_login'] = True
                     request.session['user_id'] = user.id
                     request.session['user_name'] = user.name
+
                     return redirect('/index/')
                 else:
                     message = "密码不正确！"
@@ -47,7 +48,7 @@ def login(request):
 def register(request):
     if request.session.get('is_login', None):
         # 登录状态不允许注册。
-        return redirect("index/")
+        return redirect("/index/")
     if request.method == "POST":
         register_form = forms.RegisterForm(request.POST)
         message = "请检查填写的内容！"
@@ -95,3 +96,31 @@ def logout(request):
     # del request.session['user_id']
     # del request.session['user_name']
     return redirect("http://127.0.0.1:8000/login/")
+
+
+def changepwd(request):
+    if request.method == "POST":
+        change_form = forms.ChangeForm(request.POST)
+        message = "请检查填写的内容！"
+        if change_form.is_valid():  # 获取数据
+            oldpassword = change_form.cleaned_data['oldpassword']
+            newpassword1 = change_form.cleaned_data['newpassword1']
+            newpassword2 = change_form.cleaned_data['newpassword2']
+
+            user_name = request.session.get('user_name')
+            user_id = request.session.get('user_id')
+            oldpwd = models.User.objects.filter(user_name=user_name, pwd=oldpassword)
+            if oldpwd: #判断旧密码是否输入正确
+                change_user = models.User.objects.filter(user_name=user_name,pwd=oldpassword)
+                if newpassword1 != newpassword2:  # 判断两次输入新密码密码是否相同
+                    message = "两次输入的新密码不同！"
+                    return render(request, 'login/changepwd.html', locals())
+                else:
+                    change_user.password = newpassword1
+                    request.session.flush()
+                    return redirect("http://127.0.0.1:8000/login")
+            else:
+                message = "旧密码输入错误！"
+                return render(request, 'login/changepwd.html', locals())
+    change_form = forms.ChangeForm()
+    return render(request, 'login/changepwd.html', locals())
